@@ -28,9 +28,11 @@ public class FlightResponse {
         private String name;
         private Integer age;
         private String country;
+        private Integer boardingPassId;
+        private Integer purchaseId;
         private Integer seatTypeId;
         private Integer seatId;
-        private String seatRow;
+        private String seatRow;    // Mantener como String para consistencia
         private String seatColumn;
     }
 }

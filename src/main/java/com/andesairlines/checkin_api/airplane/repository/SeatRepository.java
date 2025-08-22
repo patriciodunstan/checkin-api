@@ -14,9 +14,11 @@ public interface SeatRepository extends JpaRepository<Seat, Integer> {
 
     List<Seat> findByAirplaneIdAndSeatTypeId(Integer airplaneId, Integer seatTypeId);
 
-    @Query("SELECT s FROM Seat s WHERE s.airplaneId = :airplaneId AND s.seatTypeId = :seatTypeId AND s.seatId NOT IN (SELECT COALESCE(bp.satId, 0) FROM BoardingPass bp WHERE bp.flightId = :flightId AND bp.seatId IS NOT NULL)")
+    @Query("SELECT s FROM Seat s WHERE s.airplaneId = :airplaneId AND s.seatTypeId = :seatTypeId AND s.seatId NOT IN (SELECT COALESCE(bp.seatId, 0) FROM BoardingPass bp WHERE bp.flightId = :flightId AND bp.seatId IS NOT NULL)")
     List<Seat> findAvailableSeatsByAirplaneAndType(@Param("airplaneId") Integer airplaneId, @Param("seatTypeId") Integer seatTypeId, @Param("flightId") Integer flightId);
 
     Optional<Seat> findBySeatRowAndSeatColumnAndAirplaneId(Integer seatRow, String seatColumn, Integer airplaneId);
+
+    List<Seat> findByAirplaneId(Integer airplaneId);
 
 }
