@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    hikari:
+      connection-timeout: 2000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 600000
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+  cache:
+    caffeine:
+      spec: initialCapacity=100,maximumSize=1000,expireAfterWrite=10m
+logging:
+  level:
+    com.andesairlines: INFO
+    org.springframework.cache: INFO
+    org.springframework.retry: INFO
