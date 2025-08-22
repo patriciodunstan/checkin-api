@@ -23,9 +23,10 @@ public class Airplane {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @OneToMany(mappedBy = "airplane", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Flight> flights;
-
-    @OneToMany(mappedBy = "airplane", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(
+        mappedBy = "airplane",
+        cascade = CascadeType.ALL,
+        fetch = FetchType.LAZY
+    )
     private List<Seat> seats;
 }

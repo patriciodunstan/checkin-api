@@ -33,15 +33,7 @@ public class Passenger {
     @Column(name = "country", nullable = false, length = 50)
     private String country;
 
-    @Column(name = "boarding_pass_id")
-    private Integer boardingPassId;
 
-    @Column(name = "seat_type_id", nullable = false)
-    private Integer seatTypeId;
-
-    @Column(name = "seat_id")
-    private Integer seatId;
-
-    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "passenger", fetch = FetchType.LAZY)
     private List<BoardingPass> boardingPasses;
 }

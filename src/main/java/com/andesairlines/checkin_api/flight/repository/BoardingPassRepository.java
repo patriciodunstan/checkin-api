@@ -16,10 +16,16 @@ public interface BoardingPassRepository extends JpaRepository<BoardingPass, Inte
     List<BoardingPass> findByFlightId(Integer flightId);
 
     @Query("SELECT bp FROM BoardingPass bp LEFT JOIN FETCH bp.passenger LEFT JOIN FETCH bp.seat WHERE bp.flightId = :flightId")
-    List<BoardingPass> findByFlightIdWithDetails(@Param("flightId") Integer flightId);
+    List<BoardingPass> findBoardingPassesByFlightId(@Param("flightId") Integer flightId);
 
     Optional<BoardingPass> findByFlightIdAndPassengerId(Integer flightId, Integer passengerId);
 
     @Query("SELECT bp FROM BoardingPass bp WHERE bp.flightId = :flightId AND bp.seatId IS NOT NULL")
     List<BoardingPass> findAssignedSeatsByFlightId(@Param("flightId") Integer flightId);
+
+    @Query("SELECT bp FROM BoardingPass bp LEFT JOIN FETCH bp.passenger WHERE bp.flightId = :flightId ORDER BY bp.purchaseId")
+    List<BoardingPass> findBoardingPassesByFlightIdOrderedByPurchase(@Param("flightId") Integer flightId);
+
+    @Query("SELECT bp FROM BoardingPass bp LEFT JOIN FETCH bp.passenger WHERE bp.flightId = :flightId AND bp.purchaseId = :purchaseId")
+    List<BoardingPass> findByFlightIdAndPurchaseId(@Param("flightId") Integer flightId, @Param("purchaseId") Integer purchaseId);
 }

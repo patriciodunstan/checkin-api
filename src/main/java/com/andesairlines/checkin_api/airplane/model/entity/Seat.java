@@ -36,6 +36,4 @@ public class Seat {
     @JoinColumn(name = "airplane_id", insertable = false, updatable = false)
     private Airplane airplane;
 
-    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BoardingPass> boardingPasses;
 }

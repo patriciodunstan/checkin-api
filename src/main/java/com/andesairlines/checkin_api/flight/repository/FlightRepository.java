@@ -9,10 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface FlightRepository extends JpaRepository<Flight, Long> {
-
-    @Query("SELECT f FROM Flight f LEFT JOIN FETCH f.airplane LEFT JOIN FETCH f.boardingPasses bp LEFT JOIN FETCH bp.passenger LEFT JOIN FETCH bp.seat WHERE f.flightId = :flightId")
-    Optional<Flight> findByIdWithDetails(@Param("flightId") Integer flightId);
+public interface FlightRepository extends JpaRepository<Flight, Integer> {
 
     @Query("SELECT f FROM Flight f LEFT JOIN FETCH f.airplane WHERE f.flightId = :flightId")
     Optional<Flight> findByIdWithAirplane(@Param("flightId") Integer flightId);

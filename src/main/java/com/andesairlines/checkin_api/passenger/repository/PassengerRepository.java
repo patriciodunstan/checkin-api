@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface PassengerRepository extends JpaRepository<Passenger, Integer> {
 
-    Optional<Passenger> findById(String dni);
+    Optional<Passenger> findByDni(String dni);
 
-    @Query("SELECT p FROM Passenger P LEFT JOIN FETCH p.boardingPasses = :passengerId")
-    Optional<Passenger> fndByIdWithBoardingPasses(@Param("passengerId") Integer passengerId);
+    @Query("SELECT p FROM Passenger p LEFT JOIN FETCH p.boardingPasses WHERE p.passengerId = :passengerId")
+    Optional<Passenger> findByIdWithBoardingPasses(@Param("passengerId") Integer passengerId);
 
     List<Passenger> findBySeatTypeId(Integer seatTypeId);
 }

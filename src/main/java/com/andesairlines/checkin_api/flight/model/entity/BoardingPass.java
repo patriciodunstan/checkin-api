@@ -3,6 +3,7 @@ package com.andesairlines.checkin_api.flight.model.entity;
 
 import com.andesairlines.checkin_api.passenger.model.entity.Passenger;
 import com.andesairlines.checkin_api.airplane.model.entity.Seat;
+import com.andesairlines.checkin_api.purchase.model.entity.Purchase;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,9 @@ public class BoardingPass {
     @Column(name = "boarding_pass_id")
     private Integer boardingPassId;
 
+    @Column(name = "purchase_id", nullable = false)
+    private Integer purchaseId;
+
     @Column(name = "flight_id", nullable = false)
     private Integer flightId;
 
@@ -31,6 +35,10 @@ public class BoardingPass {
 
     @Column(name = "seat_id")
     private Integer seatId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchase_id", insertable = false, updatable = false)
+    private Purchase purchase;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flight_id", insertable = false, updatable = false)

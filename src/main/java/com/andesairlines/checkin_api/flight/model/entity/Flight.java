@@ -38,7 +38,4 @@ public class Flight {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "airplane_id", insertable = false, updatable = false)
     private Airplane airplane;
-
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BoardingPass> boardingPasses;
 }
