@@ -4,20 +4,21 @@ import com.andesairlines.checkin_api.CheckinApiApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(classes = CheckinApiApplication.class)
+@SpringBootTest(classes = CheckinApiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Transactional
 @Sql(scripts = "/test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class CheckinIntegrationTest {
 
@@ -36,7 +37,7 @@ class CheckinIntegrationTest {
         mockMvc.perform(get("/flights/{flightId}/passengers", flightId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data.flightId").value(flightId))
                 .andExpect(jsonPath("$.data.passengers").isArray());
     }
@@ -55,7 +56,7 @@ class CheckinIntegrationTest {
                 .param("seatColumn", seatColumn)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data.passengerId").value(passengerId));
     }
 

@@ -19,7 +19,7 @@ public class Purchase {
     @Column(name = "purchase_id")
     private Integer purchaseId;
 
-    @Column(name = "purchaswe_date")
+    @Column(name = "purchase_date")
     private Integer purchaseDate;
 
     @OneToMany(mappedBy = "purchase", fetch = FetchType.LAZY)
