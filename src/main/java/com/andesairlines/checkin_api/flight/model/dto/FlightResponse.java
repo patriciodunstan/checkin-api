@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -12,9 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 public class FlightResponse {
     private Integer flightId;
-    private LocalDateTime takeoffDateTime;
+    private Integer takeoffDateTime;
     private String takeoffAirport;
-    private LocalDateTime landingDateTime;
+    private Integer landingDateTime;
     private String landingAirport;
     private Integer airplaneId;
     private List<PassengerSeatInfo> passengers;

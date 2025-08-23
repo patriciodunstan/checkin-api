@@ -6,9 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Entity
 @Table(name = "flight")
 @Data
@@ -21,13 +18,13 @@ public class Flight {
     private Integer flightId;
 
     @Column(name = "takeoff_date_time", nullable = false)
-    private LocalDateTime takeoffDateTime;
+    private Integer takeoffDateTime;
 
     @Column(name = "takeoff_airport", nullable = false, length = 3)
     private String takeoffAirport;
 
     @Column(name = "landing_date_time", nullable = false)
-    private LocalDateTime landingDateTime;
+    private Integer landingDateTime;
 
     @Column(name = "landing_airport", nullable = false, length = 3)
     private String landingAirport;

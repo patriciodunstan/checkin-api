@@ -4,7 +4,7 @@ import com.andesairlines.checkin_api.common.response.ApiResponse;
 import com.andesairlines.checkin_api.flight.model.dto.FlightResponse;
 
 import com.andesairlines.checkin_api.flight.service.CheckinService;
-import com.andesairlines.checkin_api.flight.service.SeatAssignmentService;
+import com.andesairlines.checkin_api.flight.service.ManualSeatAssignmentService;
 
 import com.andesairlines.checkin_api.passenger.model.dto.PassengerResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class FlightController {
 
     private final CheckinService checkinService;
-    private final SeatAssignmentService seatAssignmentService;
+    private final ManualSeatAssignmentService manualSeatAssignmentService;
 
     @GetMapping("/{flightId}/passengers")
     @Operation(summary = "Get flight with passengers", description = "Retrieve flight information including all passengers and their seat assignments")
@@ -72,7 +72,7 @@ public class FlightController {
 
         log.info("PUT /flights/{}/passengers/{}/seat - Assigning seat {}:{}", flightId, passengerId, seatRow, seatColumn);
 
-        PassengerResponse passenger = seatAssignmentService.assignSeat(flightId, passengerId, seatRow, seatColumn);
+        PassengerResponse passenger = manualSeatAssignmentService.assignSeat(flightId, passengerId, seatRow, seatColumn);
         return ResponseEntity.ok(ApiResponse.success( passenger));
     }
 }
