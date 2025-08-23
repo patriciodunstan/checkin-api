@@ -14,8 +14,8 @@ spring:
       enabled: true
   cache:
     type: simple
-  profiles:
-    active: test
+# profiles:
+  #   active: test  # Removed - cannot set spring.profiles.active in profile-specific file
 
 logging:
   level:

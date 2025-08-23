@@ -34,6 +34,8 @@ jobs:
     
     - name: Run integration tests
       run: ./mvnw verify -Dspring.profiles.active=test
+      env:
+        SPRING_PROFILES_ACTIVE: test
     
     - name: Generate test report
       uses: dorny/test-reporter@v2

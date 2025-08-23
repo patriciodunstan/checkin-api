@@ -7,7 +7,6 @@ import com.andesairlines.checkin_api.flight.service.ManualSeatAssignmentService;
 import com.andesairlines.checkin_api.passenger.model.dto.PassengerResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,7 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FlightController.class)
-@Disabled("Temporarily disabled due to ApplicationContext issues in CI/CD")
 class FlightControllerTest {
 
     @Autowired
