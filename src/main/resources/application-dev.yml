@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://mdb-test.c6vunyturrl6.us-west-1.rds.amazonaws.com:3306/airline
-    username: postulaciones
-    password: post123456
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     hikari:
       connection-timeout: 2000
       maximum-pool-size: 3
