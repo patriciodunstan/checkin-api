@@ -1,108 +1,124 @@
 # ✈️ Andes Airlines - Check-in API
 
-Sistema de check-in automatizado para aerolínea con asignación inteligente de asientos y gestión de vuelos.
+Sistema de check-in automatizado que simula el proceso de asignación de asientos para vuelos comerciales. La API implementa lógica de negocio para asignar asientos de manera inteligente, respetando restricciones como menores acompañados y tipos de asiento.
 
-## 🚀 Características Principales
+## 🎯 ¿Qué hace esta API?
 
-- **Check-in Automatizado**: Proceso completo de check-in con asignación automática de asientos
-- **Asignación Manual**: Capacidad de reasignar asientos manualmente
-- **Gestión de Vuelos**: Consulta de vuelos con información completa de pasajeros
-- **API REST**: Endpoints documentados con Swagger/OpenAPI
-- **Base de Datos**: Soporte para MySQL en producción y H2 para desarrollo/testing
-- **Containerización**: Docker ready para deployment
-- **CI/CD**: Pipeline automatizado con GitHub Actions
-- **Testing**: Cobertura completa con tests unitarios e integración
+Esta API simula un sistema de check-in automático para aerolíneas que:
 
-## 📋 Requisitos
+1. **Asigna asientos automáticamente** cuando consultas un vuelo
+2. **Respeta reglas de negocio**:
+   - Menores de edad deben estar junto a un adulto de su grupo de compra
+   - Asientos consecutivos para grupos cuando sea posible
+   - Respeta clases de asiento (Business, Economy, etc.)
+3. **Permite reasignación manual** de asientos específicos
+4. **Devuelve información completa** del vuelo con todos los pasajeros y sus asientos
 
-- **Java 21** o superior
-- **Maven 3.8+**
-- **MySQL 8.0+** (para producción)
-- **Docker** (opcional, para containerización)
+## 🚀 API en Producción
 
-## 🛠️ Instalación y Configuración
+### 🌐 Acceso Directo
+- **API Base URL**: `https://checkin-api-production.up.railway.app/api`
+- **Swagger UI**: `https://checkin-api-production.up.railway.app/api/swagger-ui.html`
+- **Documentación OpenAPI**: `https://checkin-api-production.up.railway.app/api/api-docs`
 
-### 1. Clonar el Repositorio
+### 📋 Endpoints Disponibles
+
+#### 1. Consultar Vuelo con Check-in Automático
 ```bash
-git clone <repository-url>
-cd checkin-api
+curl -X GET "https://checkin-api-production.up.railway.app/api/flights/1/passengers"
 ```
 
-### 2. Configurar Base de Datos
+**¿Qué hace?**
+- Simula el proceso de check-in para el vuelo especificado
+- Asigna asientos automáticamente siguiendo las reglas de negocio
+- Devuelve la información completa del vuelo con todos los pasajeros
 
-#### Desarrollo (H2 - automático)
-```bash
-mvn spring-boot:run
-```
-
-#### Producción (MySQL)
-```bash
-# Crear base de datos
-mysql -u root -p
-CREATE DATABASE checkin_db;
-
-# Configurar variables de entorno
-export DB_HOST=localhost
-export DB_PORT=3306
-export DB_NAME=checkin_db
-export DB_USERNAME=your_username
-export DB_PASSWORD=your_password
-```
-
-### 3. Ejecutar la Aplicación
-```bash
-# Desarrollo
-mvn spring-boot:run
-
-# Producción
-mvn clean package
-java -jar target/checkin-api-0.0.1-SNAPSHOT.jar
-```
-
-## 🌐 Endpoints API
-
-### Gestión de Vuelos
-
-#### Obtener Vuelo con Pasajeros
-```http
-GET /flights/{flightId}/passengers
-```
-**Respuesta:**
+**Respuesta de ejemplo:**
 ```json
 {
   "code": 200,
   "data": {
     "flightId": 1,
-    "airplaneId": 100,
-    "takeoffDateTime": 1234567890,
-    "landingDateTime": 1234567890,
-    "takeoffAirport": "SCL",
-    "landingAirport": "LIM",
-    "passengers": [...]
-  }
+    "takeoffDateTime": 1688207580,
+    "takeoffAirport": "Aeropuerto Internacional Arturo Merino Benitez, Chile",
+    "landingDateTime": 1688221980,
+    "landingAirport": "Aeropuerto Internacional Jorge Chávez, Perú",
+    "airplaneId": 1,
+    "passengers": [
+      {
+        "passengerId": 144,
+        "dni": "372916627",
+        "name": "Maximiliana",
+        "age": 39,
+        "country": "Chile",
+        "boardingPassId": 7,
+        "purchaseId": 141,
+        "seatTypeId": 1,
+        "seatId": 105,
+        "seatRow": "1",
+        "seatColumn": "F"
+      }
+      // ... más pasajeros
+    ]
+  },
+  "errors": null
 }
 ```
 
-#### Asignar Asiento Manualmente
-```http
-PUT /flights/{flightId}/passengers/{passengerId}/seat?seatRow=10&seatColumn=A
+#### 2. Asignar Asiento Manualmente
+```bash
+curl -X PUT "https://checkin-api-production.up.railway.app/api/flights/1/passengers/144/seat?seatRow=2&seatColumn=A"
 ```
-**Respuesta:**
-```json
-{
-  "code": 200,
-  "data": {
-    "passengerId": 1,
-    "name": "John Doe",
-    "dni": "12345678",
-    "age": 30,
-    "country": "Chile",
-    "boardingPass": "BP001",
-    "seatTypeId": 1,
-    "seatId": 15
-  }
-}
+
+**¿Qué hace?**
+- Permite reasignar un asiento específico a un pasajero
+- Valida que el asiento exista y esté disponible
+- Verifica que el tipo de asiento sea compatible con el pasajero
+
+## 🧪 Probar la API
+
+### Usando Swagger UI (Recomendado)
+1. Ve a: `https://checkin-api-production.up.railway.app/api/swagger-ui.html`
+2. Expande el endpoint `GET /flights/{flightId}/passengers`
+3. Haz clic en "Try it out"
+4. Ingresa `1` como flightId
+5. Haz clic en "Execute"
+
+### Usando curl
+```bash
+# Consultar vuelo 1
+curl -X GET "https://checkin-api-production.up.railway.app/api/flights/1/passengers"
+
+# Reasignar asiento
+curl -X PUT "https://checkin-api-production.up.railway.app/api/flights/1/passengers/144/seat?seatRow=3&seatColumn=B"
 ```
+
+### Casos de Prueba
+- **Vuelo existente**: `flightId=1` → Devuelve 200 con datos
+- **Vuelo inexistente**: `flightId=999` → Devuelve 404
+- **Asiento inválido**: seatRow fuera de rango → Devuelve 400
+
+## 🏠 Ejecución Local
+
+### Requisitos
+- **Java 21** o superior
+- **Maven 3.8+**
+
+### Pasos
+```bash
+# 1. Clonar repositorio
+git clone <repository-url>
+cd checkin-api
+
+# 2. Ejecutar (usa base de datos en memoria H2)
+mvn spring-boot:run
+
+# 3. Acceder localmente
+# API: http://localhost:8080/api/flights/1/passengers
+# Swagger: http://localhost:8080/api/swagger-ui.html
+```
+
+**Nota**: La aplicación usa el context path `/api`, por lo que todos los endpoints tienen este prefijo.
 
 ## 🧪 Testing
 
@@ -119,51 +135,9 @@ open target/site/jacoco/index.html
 ```
 
 ### Cobertura de Tests
-- **Tests Unitarios**: 16 tests
-- **Tests de Integración**: 2 tests  
-- **Cobertura Mínima**: 70%
-
-## 🐳 Docker
-
-### Construir Imagen
-```bash
-docker build -t checkin-api .
-```
-
-### Ejecutar Container
-```bash
-docker run -p 8080:8080 \
-  -e DB_HOST=host.docker.internal \
-  -e DB_USERNAME=root \
-  -e DB_PASSWORD=password \
-  checkin-api
-```
-
-## 🚀 Deployment
-
-### Render.com (Automático)
-El proyecto está configurado para deployment automático en Render.com mediante GitHub Actions:
-
-1. **Push a main/master** → Ejecuta tests automáticamente
-2. **Tests exitosos** → Deploy automático a producción
-3. **Tests fallan** → Deployment se cancela
-
-### Variables de Entorno Requeridas
-```env
-DB_HOST=your-mysql-host
-DB_PORT=3306
-DB_NAME=checkin_db
-DB_USERNAME=your-username
-DB_PASSWORD=your-password
-RENDER_SERVICE_ID=your-service-id
-RENDER_API_KEY=your-api-key
-```
-
-## 📚 Documentación API
-
-Una vez ejecutada la aplicación, acceder a:
-- **Swagger UI**: http://localhost:8080/swagger-ui.html
-- **OpenAPI JSON**: http://localhost:8080/v3/api-docs
+- **Tests Unitarios**: 93 tests ejecutándose
+- **Cobertura**: ~70% del código
+- **Sin tests de integración** (simplificado para la prueba técnica)
 
 ## 🏗️ Arquitectura
 
@@ -184,49 +158,42 @@ src/
 ## 🔧 Stack Tecnológico
 
 - **Framework**: Spring Boot 3.4
-- **Base de Datos**: MySQL 8.0 / H2 (testing)
+- **Base de Datos**: MySQL (producción) / H2 (desarrollo)
 - **ORM**: Spring Data JPA + Hibernate
-- **Testing**: JUnit 5, Mockito, Spring Boot Test
+- **Testing**: JUnit 5, Mockito
 - **Documentación**: OpenAPI 3 (Swagger)
 - **Build**: Maven
-- **Containerización**: Docker
-- **CI/CD**: GitHub Actions
-- **Deployment**: Render.com
+- **Deployment**: Railway
 
-## 👥 Contacto
+## 🎯 Reglas de Negocio Implementadas
 
-**Desarrollador**: Patricio Dunstan  
-**Email**: [tu-email]  
-**LinkedIn**: [tu-linkedin]
+### Asignación Automática de Asientos
+1. **Menores acompañados**: Los menores de edad se asientan junto a adultos de su mismo grupo de compra
+2. **Asientos consecutivos**: Se priorizan asientos consecutivos para grupos familiares
+3. **Tipos de asiento**: Se respetan las clases de servicio (Business, Economy, etc.)
+4. **Disponibilidad**: Solo se asignan asientos disponibles
 
----
+### Validaciones
+- Verificación de existencia de vuelo
+- Validación de tipos de asiento compatibles
+- Control de disponibilidad de asientos
+- Manejo de errores con códigos HTTP apropiados
 
-## 📝 Notas para la Prueba Técnica
+## 📝 Funcionalidades Implementadas
 
-### Funcionalidades Implementadas ✅
-- [x] Check-in automatizado con asignación de asientos
-- [x] Reasignación manual de asientos
-- [x] Consulta de vuelos con pasajeros
-- [x] Validaciones de negocio (asientos válidos, disponibilidad)
-- [x] Manejo de excepciones y errores
-- [x] Tests unitarios completos (18 tests)
+### ✅ Completadas
+- [x] Check-in automatizado con asignación inteligente de asientos
+- [x] Reasignación manual de asientos específicos
+- [x] Consulta de vuelos con información completa de pasajeros
+- [x] Validaciones de negocio completas
+- [x] Manejo centralizado de excepciones
+- [x] Tests unitarios (93 tests ejecutándose)
 - [x] Documentación API con Swagger
-- [x] Pipeline CI/CD automatizado
-- [x] Containerización con Docker
-- [x] Configuración multi-ambiente
+- [x] Deployment en Railway
+- [x] Configuración multi-ambiente (dev/prod)
 
-### Decisiones de Diseño 🎯
-1. **Arquitectura en Capas**: Controller → Service → Repository
-2. **Separación de Responsabilidades**: Servicios específicos para check-in y asignación manual
-3. **Validaciones**: Tanto a nivel de controlador como de servicio
-4. **Testing Strategy**: Tests unitarios con mocks + tests de integración
-5. **Configuration**: Profiles separados para dev/test/prod
-6. **Error Handling**: GlobalExceptionHandler centralizado
-
-### Próximas Mejoras 🚀
-- [ ] Autenticación y autorización (JWT)
-- [ ] Cache con Redis
-- [ ] Métricas con Micrometer
-- [ ] Logging estructurado
-- [ ] Rate limiting
-- [ ] Versionado de API
+### 🏗️ Arquitectura
+- **Patrón**: Controller → Service → Repository
+- **Separación de responsabilidades**: Servicios especializados por funcionalidad
+- **Error handling**: GlobalExceptionHandler centralizado
+- **Testing**: Estrategia de tests unitarios con mocks
