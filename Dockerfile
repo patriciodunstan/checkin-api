@@ -21,13 +21,19 @@ RUN ./mvnw package -DskipTests
 
 
 # Etapa 2: Imagen final ligera
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:21-jre
 
 WORKDIR /server
+
+# Crear usuario no-root para seguridad
+RUN addgroup --system spring && adduser --system spring --ingroup spring
+USER spring:spring
 
 # Copiar el .jar desde la etapa de build
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
+# Render.com usa la variable PORT
+EXPOSE $PORT
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Configurar JVM para contenedores y usar PORT de Render
+ENTRYPOINT ["java", "-Dserver.port=${PORT:-8080}", "-Xmx512m", "-Xms256m", "-XX:+UseContainerSupport", "-jar", "app.jar"]
