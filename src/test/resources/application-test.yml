@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+  cache:
+    type: simple
+  profiles:
+    active: test
+
+logging:
+  level:
+    com.andesairlines: DEBUG
+    org.springframework.test: DEBUG
+    org.hibernate.SQL: DEBUG
