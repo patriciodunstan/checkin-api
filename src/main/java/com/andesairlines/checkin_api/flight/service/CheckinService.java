@@ -98,7 +98,7 @@ public class CheckinService {
 
             List<Seat> seatsOfType = availableSeats.stream()
                     .filter(seat -> seat.getSeatTypeId().equals(seatTypeId))
-                    .collect(Collectors.toList());
+                    .toList();
 
             Map<Integer, List<Seat>> seatsByRow = seatsOfType.stream()
                     .collect(Collectors.groupingBy(Seat::getSeatRow));
