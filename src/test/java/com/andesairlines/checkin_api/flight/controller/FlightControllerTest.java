@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = FlightController.class)
+@WebMvcTest(FlightController.class)
 class FlightControllerTest {
 
     @Autowired
