@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,5 +16,4 @@ public interface PassengerRepository extends JpaRepository<Passenger, Integer> {
     @Query("SELECT p FROM Passenger p LEFT JOIN FETCH p.boardingPasses WHERE p.passengerId = :passengerId")
     Optional<Passenger> findByIdWithBoardingPasses(@Param("passengerId") Integer passengerId);
 
-    List<Passenger> findBySeatTypeId(Integer seatTypeId);
 }
