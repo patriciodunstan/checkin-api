@@ -1,17 +1,20 @@
 spring:
   datasource:
-    url: ${DB_URL}?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true
+    url: ${DB_URL}?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&connectionTimeout=3000&socketTimeout=45000
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
-      connection-timeout: 30000
+      connection-timeout: 10000
       maximum-pool-size: 10
       minimum-idle: 2
-      idle-timeout: 30000
-      max-lifetime: 1800000
+      idle-timeout: 4500
+      max-lifetime: 300000
       connection-test-query: SELECT 1
-      validation-timeout: 5000
-      leak-detection-threshold: 60000
+      validation-timeout: 3000
+      leak-detection-threshold: 10000
+      initialization-fail-timeout: 30000
+      keepalive-time: 3000
+      max-lifetime: 280000
   jpa:
     show-sql: true
     hibernate:
