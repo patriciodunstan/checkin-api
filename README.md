@@ -147,19 +147,26 @@ curl -X PUT "https://checkin-api-idfh.onrender.com/api/flights/1/passengers/144/
    - Explorar y probar los endpoints disponibles
 
 ### Usando Swagger UI (Recomendado)
-1. Ve a: `https://checkin-api-production.up.railway.app/api/swagger-ui.html`
-2. Expande el endpoint `GET /flights/{flightId}/passengers`
-3. Haz clic en "Try it out"
-4. Ingresa `1` como flightId
-5. Haz clic en "Execute"
+1. **Local**: Ve a [http://localhost:8080/api/swagger-ui.html](http://localhost:8080/api/swagger-ui.html)
+2. **Producción**: Ve a [https://checkin-api-idfh.onrender.com/api/swagger-ui.html](https://checkin-api-idfh.onrender.com/api/swagger-ui.html)
+3. Expande el endpoint `GET /api/flights/{flightId}/passengers`
+4. Haz clic en "Try it out"
+5. Ingresa `1` como flightId
+6. Haz clic en "Execute"
 
 ### Usando curl
 ```bash
-# Consultar vuelo 1
+# Consultar vuelo 1 (Local)
 curl -X GET "http://localhost:8080/api/flights/1/passengers"
 
-# Reasignar asiento
+# Consultar vuelo 1 (Producción)
+curl -X GET "https://checkin-api-idfh.onrender.com/api/flights/1/passengers"
+
+# Reasignar asiento (Local)
 curl -X PUT "http://localhost:8080/api/flights/1/passengers/144/seat?seatRow=3&seatColumn=B"
+
+# Reasignar asiento (Producción)
+curl -X PUT "https://checkin-api-idfh.onrender.com/api/flights/1/passengers/144/seat?seatRow=3&seatColumn=B"
 ```
 
 ## 🛠️ Tecnologías
