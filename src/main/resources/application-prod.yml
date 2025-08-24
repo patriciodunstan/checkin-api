@@ -5,43 +5,62 @@ spring:
     password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
+      # Tiempo máximo de espera para obtener una conexión del pool (10 segundos)
       connection-timeout: 10000
-      # Tiempo de inactividad antes de que se cierre la conexión (menos de 5 segundos)
+      # Tiempo máximo de inactividad de una conexión (4 segundos, menos de 5 que es el límite del servidor)
       idle-timeout: 4000
-      # Tiempo máximo de vida de la conexión
-      max-lifetime: 30000
-      # Mínimo de conexiones inactivas
-      minimum-idle: 2
-      # Máximo de conexiones en el pool
-      maximum-pool-size: 10
-      # Consulta para validar la conexión
-      connection-test-query: SELECT 1
-      # Tiempo de espera para validar la conexión
-      validation-timeout: 3000
-      # Frecuencia para mantener vivas las conexiones (cada 3 segundos)
-      keepalive-time: 3000
-      # Tiempo de espera para la inicialización
-      initialization-fail-timeout: 0
-      # Comando SQL a ejecutar al crear una nueva conexión
-      connection-init-sql: SELECT 1
-      # Umbral para detectar fugas de conexión
-      leak-detection-threshold: 5000
-      # Configuración específica del pool
-      pool-name: HikariCP
+      # Tiempo máximo de vida de una conexión (20 segundos)
+      max-lifetime: 20000
       # Validar conexiones al obtenerlas del pool
       auto-commit: true
       # Validar conexiones antes de usarlas
       validate: true
+      # Tamaño mínimo del pool de conexiones
+      minimum-idle: 2
+      # Tamaño máximo del pool de conexiones
+      maximum-pool-size: 10
+      # Consulta para validar conexiones
+      connection-test-query: SELECT 1
+      # Tiempo de espera para validación (2 segundos)
+      validation-timeout: 2000
+      # Frecuencia para mantener vivas las conexiones (cada 2 segundos)
+      keepalive-time: 2000
+      # No fallar si no se pueden crear conexiones iniciales
+      initialization-fail-timeout: 0
+      # Comando a ejecutar al crear una conexión
+      connection-init-sql: SELECT 1
+      # Umbral para detectar fugas de conexión (4 segundos)
+      leak-detection-threshold: 4000
+      # Nombre del pool para logs
+      pool-name: HikariCP
+      # Configuración adicional para manejo de conexiones
       data-source-properties:
+        # Configuración de timeouts
+        socketTimeout: 30000
+        connectTimeout: 10000
+        # Reconexión automática
+        autoReconnect: true
+        maxReconnects: 3
+        initialTimeout: 5
+        # SSL
+        useSSL: true
+        requireSSL: true
+        verifyServerCertificate: true
+        # Caché de consultas
+        useServerPrepStmts: true
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
         useLocalSessionState: true
         rewriteBatchedStatements: true
         cacheResultSetMetadata: true
         cacheServerConfiguration: true
         elideSetAutoCommits: true
+        # Otras optimizaciones
+        useCursorFetch: true
+        maintainTimeStats: false
+        useLocalTransactionState: true
+        useReadAheadInput: false
         maintainTimeStats: false
   jpa:
     hibernate:

@@ -1,24 +1,19 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: password
-    driver-class-name: org.h2.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-  cache:
-    type: simple
-# profiles:
-  #   active: test  # Removed - cannot set spring.profiles.active in profile-specific file
+  autoconfigure:
+    exclude: 
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration
 
+# Configuración del servidor para tests
+server:
+  port: 0  # Puerto aleatorio
+  servlet:
+    context-path: /api
+
+# Logging mínimo
 logging:
   level:
+    root: ERROR
     com.andesairlines: DEBUG
-    org.springframework.test: DEBUG
-    org.hibernate.SQL: DEBUG
