@@ -1,27 +1,67 @@
 # ✈️ Andes Airlines - Check-in API
 
-Sistema de check-in automatizado que simula el proceso de asignación de asientos para vuelos comerciales. La API implementa lógica de negocio para asignar asientos de manera inteligente, respetando restricciones como menores acompañados y tipos de asiento.
+Sistema de check-in automatizado que simula la asignación de asientos para vuelos comerciales. La API implementa reglas de negocio como menores acompañados y clases de asiento, y permite reasignación manual.
 
-## 🎯 ¿Qué hace esta API?
+## 🚀 Empezando
 
-Esta API simula un sistema de check-in automático para aerolíneas que:
+### Requisitos Previos
 
-1. **Asigna asientos automáticamente** cuando consultas un vuelo
-2. **Respeta reglas de negocio**:
-   - Menores de edad deben estar junto a un adulto de su grupo de compra
-   - Asientos consecutivos para grupos cuando sea posible
-   - Respeta clases de asiento (Business, Economy, etc.)
-3. **Permite reasignación manual** de asientos específicos
-4. **Devuelve información completa** del vuelo con todos los pasajeros y sus asientos
+- Java 17 o superior
+- Maven 3.8+
+- Docker (opcional, para ejecución con contenedores)
 
-## 🚀 API en Producción
+### Configuración del Entorno
 
-### 🌐 Acceso Directo
-- **API Base URL**: `https://checkin-api-production.up.railway.app/api`
-- **Swagger UI**: `https://checkin-api-production.up.railway.app/api/swagger-ui.html`
-- **Documentación OpenAPI**: `https://checkin-api-production.up.railway.app/api/api-docs`
+1. **Clonar el repositorio**
+```bash
+git clone https://github.com/patriciodunstan/checkin-api.git
+cd checkin-api
+```
 
-### 📋 Endpoints Disponibles
+2. **Configurar base de datos**
+   - Para producción: MySQL 8.0+, crea una base `checkin` y configura credenciales en `src/main/resources/application-prod.yml`.
+   - Para pruebas: H2 en memoria (no requiere configuración adicional).
+
+3. **Perfiles de Ejecución**
+   - **Desarrollo**: `mvn spring-boot:run -Dspring-boot.run.profiles=dev`
+   - **Pruebas**: `mvn test -Dspring.profiles.active=test`
+   - **Producción**: `mvn spring-boot:run -Dspring-boot.run.profiles=prod`
+
+## 🌐 Producción
+
+- **API Base URL**: `https://checkin-api-idfh.onrender.com/api`
+- **Swagger UI**: `https://checkin-api-idfh.onrender.com/api/swagger-ui.html`
+- **Documentación OpenAPI**: `https://checkin-api-idfh.onrender.com/api/api-docs`
+
+### Uso de Swagger UI
+1. Abre [Swagger UI](https://checkin-api-idfh.onrender.com/api/swagger-ui.html)
+2. Explora los endpoints:
+   - `GET /flights/{flightId}/passengers` → check-in automático de vuelo
+   - `PUT /flights/{flightId}/passengers/{passengerId}/seat` → reasignación manual
+3. Haz clic en "Try it out", completa los parámetros y presiona "Execute" para probar.
+
+### Usando curl
+```bash
+# Consultar vuelo 1
+curl -X GET "https://checkin-api-idfh.onrender.com/api/flights/1/passengers"
+
+# Reasignar asiento
+curl -X PUT "https://checkin-api-idfh.onrender.com/api/flights/1/passengers/144/seat?seatRow=3&seatColumn=B"
+```
+
+## 🎯 Funcionalidades
+
+- Check-in automatizado con asignación inteligente de asientos
+- Reasignación manual de asientos
+- Consulta de vuelos con pasajeros y asientos
+- Validaciones de negocio completas
+- Manejo centralizado de excepciones
+- Tests unitarios (~93 tests, cobertura ~70%)
+- Documentación API con Swagger
+- Multi-ambiente: dev / prod
+- Deployment en Render
+
+## 📋 Endpoints Disponibles
 
 #### 1. Consultar Vuelo con Check-in Automático
 ```bash
@@ -67,7 +107,7 @@ curl -X GET "https://checkin-api-production.up.railway.app/api/flights/1/passeng
 
 #### 2. Asignar Asiento Manualmente
 ```bash
-curl -X PUT "https://checkin-api-production.up.railway.app/api/flights/1/passengers/144/seat?seatRow=2&seatColumn=A"
+curl -X PUT "https://checkin-api-idfh.onrender.com/api/flights/1/passengers/144/seat?seatRow=2&seatColumn=A"
 ```
 
 **¿Qué hace?**
@@ -75,7 +115,36 @@ curl -X PUT "https://checkin-api-production.up.railway.app/api/flights/1/passeng
 - Valida que el asiento exista y esté disponible
 - Verifica que el tipo de asiento sea compatible con el pasajero
 
-## 🧪 Probar la API
+## 🧪 Probar la API Localmente
+
+### Configuración Inicial
+
+1. **Base de Datos en Memoria**
+   - El perfil `test` utiliza H2 en memoria
+   - No se requiere configuración adicional
+
+2. **Ejecutar Tests**
+   ```bash
+   # Ejecutar todos los tests
+   mvn test
+   
+   # Ejecutar tests específicos
+   mvn test -Dtest=FlightControllerTest
+   
+   # Con cobertura de código
+   mvn clean test jacoco:report
+   ```
+
+### Pruebas Manuales
+
+1. **Iniciar la aplicación en modo desarrollo**
+   ```bash
+   mvn spring-boot:run -Dspring-boot.run.profiles=dev
+   ```
+
+2. **Acceder a Swagger UI**
+   - Abrir en el navegador: http://localhost:8080/api/swagger-ui.html
+   - Explorar y probar los endpoints disponibles
 
 ### Usando Swagger UI (Recomendado)
 1. Ve a: `https://checkin-api-production.up.railway.app/api/swagger-ui.html`
@@ -87,16 +156,73 @@ curl -X PUT "https://checkin-api-production.up.railway.app/api/flights/1/passeng
 ### Usando curl
 ```bash
 # Consultar vuelo 1
-curl -X GET "https://checkin-api-production.up.railway.app/api/flights/1/passengers"
+curl -X GET "http://localhost:8080/api/flights/1/passengers"
 
 # Reasignar asiento
-curl -X PUT "https://checkin-api-production.up.railway.app/api/flights/1/passengers/144/seat?seatRow=3&seatColumn=B"
+curl -X PUT "http://localhost:8080/api/flights/1/passengers/144/seat?seatRow=3&seatColumn=B"
 ```
 
-### Casos de Prueba
-- **Vuelo existente**: `flightId=1` → Devuelve 200 con datos
-- **Vuelo inexistente**: `flightId=999` → Devuelve 404
-- **Asiento inválido**: seatRow fuera de rango → Devuelve 400
+## 🛠️ Tecnologías
+
+- Java 17, Spring Boot 3.4
+- MySQL (producción) / H2 (desarrollo)
+- Spring Data JPA + Hibernate
+- JUnit 5, Mockito
+- Swagger / OpenAPI 3
+- Maven
+- Deployment: Render / Docker
+
+## 🏗️ Arquitectura
+
+```
+src/
+├── main/java/com/andesairlines/checkin_api/
+│   ├── airplane/    # Gestión de aviones y asientos
+│   ├── common/      # Excepciones y respuestas comunes
+│   ├── flight/      # Lógica de vuelos y check-in
+│   └── passenger/   # Gestión de pasajeros
+├── main/resources/
+│   ├── application.yml
+│   ├── application-dev.yml
+│   └── application-prod.yml
+└── test/            # Tests unitarios e integración
+```
+
+- **Patrón**: Controller → Service → Repository
+- **Separación de responsabilidades** clara
+- **Error handling** centralizado
+- **Tests unitarios** con mocks
+
+## 🎯 Reglas de Negocio
+
+- Menores acompañados por adultos
+- Asientos consecutivos para grupos
+- Respeto a clases de asiento (Business, Economy)
+- Validación de disponibilidad y compatibilidad
+- Manejo de errores con códigos HTTP
+
+## 🧪 Testing
+
+```bash
+# Ejecutar tests unitarios
+mvn test
+
+# Cobertura
+mvn clean test jacoco:report
+open target/site/jacoco/index.html
+```
+
+## 📝 Licencia
+
+MIT License - ver [LICENSE](LICENSE)
+
+## 🤝 Contribución
+
+Lee [CONTRIBUTING.md](CONTRIBUTING.md) para más información.
+
+## 📞 Contacto
+
+dev@andesairlines.com
 
 ## 🏠 Ejecución Local
 
