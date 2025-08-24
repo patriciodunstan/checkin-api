@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/checkin?useSSL=true&requireSSL=false&verifyServerCertificate=false&serverTimezone=UTC&socketTimeout=30000&connectTimeout=10000}
+    # URL sin SSL - Solución definitiva para el error de certificados
+    url: ${DB_URL:jdbc:mysql://localhost:3306/checkin?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&socketTimeout=30000&connectTimeout=10000}
     username: ${DB_USERNAME:}
     password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -42,10 +43,9 @@ spring:
         autoReconnect: true
         maxReconnects: 3
         initialTimeout: 5
-        # SSL
-        useSSL: true
-        requireSSL: true
-        verifyServerCertificate: true
+        # SSL COMPLETAMENTE DESHABILITADO
+        useSSL: false
+        allowPublicKeyRetrieval: true
         # Caché de consultas
         useServerPrepStmts: true
         cachePrepStmts: true
@@ -61,7 +61,6 @@ spring:
         maintainTimeStats: false
         useLocalTransactionState: true
         useReadAheadInput: false
-        # ✅ ELIMINÉ LA LÍNEA DUPLICADA maintainTimeStats: false
   jpa:
     hibernate:
       ddl-auto: validate
