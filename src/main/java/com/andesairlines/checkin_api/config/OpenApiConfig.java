@@ -29,7 +29,7 @@ public class OpenApiConfig {
                                 .url("https://opensource.org/licenses/MIT")))
                 .servers(List.of(
                         new Server().url("http://localhost:8080/api").description("Developmnent server"),
-                        new Server().url("https://api.andesairlines.com").description("Production server)"
-                )));
+                        new Server().url("https://api.andesairlines.com").description("Production server")
+                ));
     }
 }
