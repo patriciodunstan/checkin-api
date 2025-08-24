@@ -1,24 +1,61 @@
 spring:
   datasource:
-    url: ${DB_URL}?useSSL=true&requireSSL=true&verifyServerCertificate=true&autoReconnect=true&failOverReadOnly=false&maxReconnects=10&connectionTimeout=3000&socketTimeout=45000
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/checkin?useSSL=true&requireSSL=true&verifyServerCertificate=true&serverTimezone=UTC&socketTimeout=30000&connectTimeout=10000}
+    username: ${DB_USERNAME:}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 10000
-      maximum-pool-size: 15
-      minimum-idle: 5
-      idle-timeout: 4500
-      max-lifetime: 300000
+      # Tiempo de inactividad antes de que se cierre la conexión (menos de 5 segundos)
+      idle-timeout: 4000
+      # Tiempo máximo de vida de la conexión
+      max-lifetime: 30000
+      # Mínimo de conexiones inactivas
+      minimum-idle: 2
+      # Máximo de conexiones en el pool
+      maximum-pool-size: 10
+      # Consulta para validar la conexión
       connection-test-query: SELECT 1
+      # Tiempo de espera para validar la conexión
       validation-timeout: 3000
-      leak-detection-threshold: 10000
-      initialization-fail-timeout: 30000
+      # Frecuencia para mantener vivas las conexiones (cada 3 segundos)
       keepalive-time: 3000
-      max-lifetime: 280000
+      # Tiempo de espera para la inicialización
+      initialization-fail-timeout: 0
+      # Comando SQL a ejecutar al crear una nueva conexión
+      connection-init-sql: SELECT 1
+      # Umbral para detectar fugas de conexión
+      leak-detection-threshold: 5000
+      # Configuración específica del pool
+      pool-name: HikariCP
+      # Validar conexiones al obtenerlas del pool
+      auto-commit: true
+      # Validar conexiones antes de usarlas
+      validate: true
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
   jpa:
-    show-sql: false
     hibernate:
       ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc:
+          time_zone: UTC
+          batch_size: 20
+        connection:
+          provider_disables_autocommit: true
+    open-in-view: false
   cache:
     caffeine:
       spec: initialCapacity=100,maximumSize=1000,expireAfterWrite=10m

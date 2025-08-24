@@ -1,24 +1,35 @@
 spring:
   datasource:
-    url: ${DB_URL}?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&connectionTimeout=3000&socketTimeout=45000
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/checkin?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&socketTimeout=30000&connectTimeout=10000}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 10000
-      maximum-pool-size: 10
-      minimum-idle: 2
-      idle-timeout: 4500
+      idle-timeout: 30000
       max-lifetime: 300000
+      minimum-idle: 5
+      maximum-pool-size: 20
       connection-test-query: SELECT 1
-      validation-timeout: 3000
-      leak-detection-threshold: 10000
-      initialization-fail-timeout: 30000
-      keepalive-time: 3000
-      max-lifetime: 280000
+      validation-timeout: 5000
+      keepalive-time: 60000
+      initialization-fail-timeout: 0
+      connection-init-sql: SELECT 1
+      leak-detection-threshold: 60000
   jpa:
-    show-sql: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+          batch_size: 20
+        connection:
+          provider_disables_autocommit: true
+    open-in-view: false
   cache:
     caffeine:
       spec: initialCapacity=50,maximumSize=200,expireAfterWrite=2m
