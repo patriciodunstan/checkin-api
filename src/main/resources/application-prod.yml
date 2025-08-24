@@ -61,7 +61,7 @@ spring:
         maintainTimeStats: false
         useLocalTransactionState: true
         useReadAheadInput: false
-        maintainTimeStats: false
+        # ✅ ELIMINÉ LA LÍNEA DUPLICADA maintainTimeStats: false
   jpa:
     hibernate:
       ddl-auto: validate
