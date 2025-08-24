@@ -5,20 +5,22 @@ spring:
     password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      connection-timeout: 10000
-      idle-timeout: 4000
-      max-lifetime: 20000
-      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000  # 10 minutes
+      max-lifetime: 1800000  # 30 minutes
+      minimum-idle: 5
       maximum-pool-size: 10
       connection-test-query: SELECT 1
-      validation-timeout: 2000
-      keepalive-time: 2000
-      leak-detection-threshold: 4000
+      validation-timeout: 5000
+      keepalive-time: 30000  # 30 seconds
+      leak-detection-threshold: 60000  # 1 minute
       pool-name: HikariCP
-      initialization-fail-timeout: 0
+      initialization-fail-timeout: 1
       connection-init-sql: SELECT 1
       auto-commit: false
       data-source-properties:
+        socketTimeout: 30000
+        connectTimeout: 10000
         useSSL: false
         allowPublicKeyRetrieval: true
         tcpKeepAlive: true
@@ -49,6 +51,21 @@ spring:
   cache:
     caffeine:
       spec: initialCapacity=100,maximumSize=1000,expireAfterWrite=10m
+  # Add this for Swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+# Swagger configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    doc-expansion: none
+  show-actuator: true
 
 server:
   port: ${PORT:8080}
@@ -61,4 +78,5 @@ logging:
     org.springframework.cache: INFO
     org.springframework.retry: INFO
     org.springframework.web: INFO
+    org.springdoc: INFO
     root: INFO
