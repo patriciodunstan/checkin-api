@@ -1,6 +1,5 @@
 package com.andesairlines.checkin_api.config;
 
-
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -15,7 +14,7 @@ import java.util.List;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI customOpenAPI(){
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("Andes Airlines Check-in API")
@@ -28,7 +27,7 @@ public class OpenApiConfig {
                                 .name("MIT License")
                                 .url("https://opensource.org/licenses/MIT")))
                 .servers(List.of(
-                        new Server().url("http://localhost:8080/api").description("Developmnent server"),
+                        new Server().url("http://localhost:8080/api").description("Development server"),
                         new Server().url("https://checkin-api-idfh.onrender.com/api").description("Production server")
                 ));
     }
